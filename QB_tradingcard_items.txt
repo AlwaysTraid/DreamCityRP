@@ -1,0 +1,5 @@
+QBShared.Items = {
+    ['boosterpack'] = { ['name'] = 'boosterpack', ['label'] = 'boosterpack', ['weight'] = 2, ['type'] = 'item', ['image'] = 'boosterpack.png', ['unique'] = true, ['useable'] = true, ['shouldClose'] = true, ['combinable'] = nil, ['description'] = 'boosterpack'},
+    ['album'] = { ['name'] = 'album', ['label'] = 'album', ['weight'] = 2, ['type'] = 'item', ['image'] = 'album.png', ['unique'] = true, ['useable'] = true, ['shouldClose'] = true, ['combinable'] = nil, ['description'] = 'album'},
+    ['tradingcard'] = { ['name'] = 'tradingcard', ['label'] = 'tradingcard', ['weight'] = 2, ['type'] = 'item', ['image'] = 'tradingcard.png', ['unique'] = true, ['useable'] = true, ['shouldClose'] = true, ['combinable'] = nil, ['description'] = 'tradingcard'},
+}
