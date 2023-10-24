@@ -1,0 +1,117 @@
+Go in your es_extended then into client and open main.lua
+
+Remove this code: 
+Citizen.CreateThread(function()
+	while true do
+		Citizen.Wait(5000)
+
+		local playerPed      = PlayerPedId()
+		local loadout        = {}
+		local loadoutChanged = false
+
+		if IsPedDeadOrDying(playerPed) then
+			isLoadoutLoaded = false
+		end
+
+		for i=1, #Config.Weapons do
+			local weaponName = Config.Weapons[i].name
+			local weaponHash = GetHashKey(weaponName)
+			local weaponComponents = {}
+
+			if HasPedGotWeapon(playerPed, weaponHash, false) and weaponName ~= 'WEAPON_UNARMED' then
+				local ammo = GetAmmoInPedWeapon(playerPed, weaponHash)
+				local components = Config.Weapons[i].components
+
+				for j=1, #components do
+					if HasPedGotWeaponComponent(playerPed, weaponHash, components[j].hash) then
+						table.insert(weaponComponents, components[j].name)
+					end
+				end
+
+				if not lastLoadout[weaponName] or lastLoadout[weaponName] ~= ammo then
+					loadoutChanged = true
+				end
+
+				lastLoadout[weaponName] = ammo
+
+				table.insert(loadout, {
+					name = weaponName,
+					ammo = ammo,
+					label = Config.Weapons[i].label,
+					components = weaponComponents
+				})
+			else
+				if lastLoadout[weaponName] then
+					loadoutChanged = true
+				end
+
+				lastLoadout[weaponName] = nil
+			end
+		end
+
+		if loadoutChanged and isLoadoutLoaded then
+			ESX.PlayerData.loadout = loadout
+			TriggerServerEvent('esx:updateLoadout', loadout)
+		end
+	end
+end)
+
+and replace this with this code: 
+
+RegisterNetEvent('esx:savemyLoadout')
+AddEventHandler('esx:savemyLoadout', function()
+    local playerPed      = PlayerPedId()
+    local loadout        = {}
+	local LastLoadout = {}
+    local loadoutChanged = false
+
+    if IsPedDeadOrDying(playerPed) then
+        LoadoutLoaded = false
+    end
+    for i=1, #Config.Weapons, 1 do
+        local weaponName = Config.Weapons[i].name
+        local weaponHash = GetHashKey(weaponName)
+        local weaponComponents = {}
+        if HasPedGotWeapon(playerPed, weaponHash, false) and weaponName ~= 'WEAPON_UNARMED' then
+            local ammo = GetAmmoInPedWeapon(playerPed, weaponHash)
+            local components = Config.Weapons[i].components
+
+            for j=1, #components, 1 do
+                if HasPedGotWeaponComponent(playerPed, weaponHash, components[j].hash) then
+                    table.insert(weaponComponents, components[j].name)
+                end
+            end
+
+            if LastLoadout[weaponName] == nil or LastLoadout[weaponName] ~= ammo then
+                loadoutChanged = true
+            end
+
+            LastLoadout[weaponName] = ammo
+
+            table.insert(loadout, {
+                name = weaponName,
+                ammo = ammo,
+                label = Config.Weapons[i].label,
+                components = weaponComponents
+            })
+        else
+            if LastLoadout[weaponName] ~= nil then
+                loadoutChanged = true
+            end
+
+            LastLoadout[weaponName] = nil
+        end
+
+    end
+
+    if loadoutChanged and LoadoutLoaded then
+        ESX.PlayerData.loadout = loadout
+        TriggerServerEvent('esx:updateLoadout', loadout)
+    end
+end)
+
+Now you have replaced the loop with an event. Now you need to save the players loadout each time the player gets a weapon. ( weapon shop, inventory, houses, crafting etc etc)
+Only give weapons serversided with xPlayer.addWeapon SO NO GiveWeaponToPed!!!!!
+
+To save a players loadout when they got a weapon use: TriggerClientEvent('esx:savemyLoadout', source) so that the players loadout gets saved. 
+DO THIS EVERYWHERE A WEAPON IS GIVEN ETC ETC

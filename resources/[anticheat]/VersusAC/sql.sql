@@ -1,0 +1,17 @@
+CREATE TABLE `versusac` (
+	`id` int(11) NULL DEFAULT NULL COLLATE 'utf8mb4_bin',
+	`name` VARCHAR(32) NULL DEFAULT NULL COLLATE 'utf8mb4_bin',
+	`token` LONGTEXT NULL DEFAULT NULL COLLATE 'utf8mb4_bin',
+	`license` VARCHAR(50) NOT NULL COLLATE 'utf8mb4_bin',
+	`steamid` VARCHAR(25) NULL DEFAULT NULL COLLATE 'utf8mb4_bin',
+	`liveid` VARCHAR(21) NULL DEFAULT NULL COLLATE 'utf8mb4_bin',
+	`xblid` VARCHAR(21) NULL DEFAULT NULL COLLATE 'utf8mb4_bin',
+	`discord` VARCHAR(30) NULL DEFAULT NULL COLLATE 'utf8mb4_bin',
+	`ip` VARCHAR(255) NULL DEFAULT NULL COLLATE 'utf8mb4_bin',
+	`reason` VARCHAR(255) NOT NULL COLLATE 'utf8mb4_bin',
+	`date` VARCHAR(255) NOT NULL COLLATE 'utf8mb4_bin',
+	KEY (`id`) USING BTREE
+)
+COLLATE='utf8mb4_bin'
+ENGINE=InnoDB
+;
